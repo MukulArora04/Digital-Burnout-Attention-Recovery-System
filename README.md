@@ -1,2 +1,5 @@
-# Digital-Burnout-Attention-Recovery-System
-People are mentally exhausted, distracted, and addicted to screens – but there’s no system that actively helps recover attention.
+## Project Structure
+
+- frontend → UI (HTML, CSS, JS)
+- backend → Python server
+- build-template → Configuration
