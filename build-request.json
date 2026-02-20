@@ -1,0 +1,155 @@
+{
+  "kind": "build_request",
+  "title": "Fix missing root element binding and JavaScript errors causing blank white page",
+  "priority": "high",
+  "requirements": [
+    {
+      "id": "REQ-83",
+      "text": "Verify that frontend/index.html contains a div element with id='root' in the body section, and if missing, add it with the exact markup: <div id=\"root\"></div>",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-last"
+        ],
+        "quotes": [
+          "get the missing root of element in binding"
+        ]
+      },
+      "acceptanceCriteria": [
+        "The frontend/index.html file contains <div id=\"root\"></div> in the body",
+        "The root div is the only child element in the body before the script tag",
+        "No other elements interfere with React mounting"
+      ]
+    },
+    {
+      "id": "REQ-84",
+      "text": "Verify that frontend/src/main.tsx correctly targets the root element using document.getElementById('root') and includes a null check with fallback error logging if the element is not found, displaying a visible error message in the console and on the page if mounting fails",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-last"
+        ],
+        "quotes": [
+          "get the missing root of element in binding"
+        ]
+      },
+      "acceptanceCriteria": [
+        "The createRoot call uses document.getElementById('root')",
+        "Code checks if rootElement is null before calling createRoot",
+        "If root element is missing, logs detailed error to console",
+        "If root element is missing, displays visible error message on page using document.body.innerHTML"
+      ]
+    },
+    {
+      "id": "REQ-85",
+      "text": "Add comprehensive try-catch blocks around the ReactDOM.createRoot and root.render calls in frontend/src/main.tsx that catch any initialization errors, log them with full stack traces to console.error, and display a user-visible error message directly to document.body",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-last"
+        ],
+        "quotes": [
+          "always js error also"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Try-catch wraps the entire React mounting logic",
+        "Caught errors are logged with console.error including stack trace",
+        "Error message is displayed visibly on the page using document.body.innerHTML with red background",
+        "Error display includes the error message text and component name that failed"
+      ]
+    },
+    {
+      "id": "REQ-86",
+      "text": "Add console.log statements at the very beginning of frontend/src/main.tsx (before any imports) and immediately before the createRoot call to trace execution flow, logging 'main.tsx: Script loaded' and 'main.tsx: About to mount React app' respectively",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-last"
+        ],
+        "quotes": [
+          "always js error also"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Console log appears before any import statements",
+        "Console log appears immediately before createRoot call",
+        "Logs include timestamp or execution order markers",
+        "Logs are visible in browser developer console"
+      ]
+    },
+    {
+      "id": "REQ-87",
+      "text": "Verify that all import statements in frontend/src/main.tsx resolve correctly by checking that imported modules (React, ReactDOM, App component, QueryClientProvider, InternetIdentityProvider) exist and have valid exports, wrapping imports in try-catch if necessary to catch module resolution errors",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-last"
+        ],
+        "quotes": [
+          "always js error also"
+        ]
+      },
+      "acceptanceCriteria": [
+        "All import paths are correct and files exist",
+        "No circular dependency issues between imported modules",
+        "Module resolution errors are caught and logged with specific import that failed",
+        "Fallback error UI displays if critical imports fail"
+      ]
+    },
+    {
+      "id": "REQ-88",
+      "text": "Add defensive initialization checks to InternetIdentityProvider in frontend/src/hooks/useInternetIdentity.ts to ensure it never throws uncaught errors during context setup, wrapping any AuthClient initialization or async calls in try-catch blocks with error logging and fallback to unauthenticated state",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-last"
+        ],
+        "quotes": [
+          "always js error also"
+        ]
+      },
+      "acceptanceCriteria": [
+        "InternetIdentityProvider component has try-catch around initialization logic",
+        "Errors during auth setup do not prevent app from rendering",
+        "Failed authentication gracefully falls back to logged-out state",
+        "Error details are logged to console for debugging"
+      ]
+    },
+    {
+      "id": "REQ-89",
+      "text": "Verify that the App component in frontend/src/App.tsx exports correctly as the default export and that it renders without throwing errors by temporarily replacing its content with a simple div displaying 'App component loaded successfully' to isolate rendering issues",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-last"
+        ],
+        "quotes": [
+          "always js error also"
+        ]
+      },
+      "acceptanceCriteria": [
+        "App component has proper export default declaration",
+        "Simplified App component renders successfully without child components",
+        "Console logs confirm App component function executes",
+        "Visible text appears on screen confirming React is mounted"
+      ]
+    }
+  ],
+  "constraints": [
+    "Do not modify the backend Motoko code in backend/main.mo",
+    "Preserve existing ErrorBoundary component functionality in frontend/src/components/ErrorBoundary.tsx",
+    "Maintain Internet Identity authentication system integration",
+    "Keep all existing route definitions in the TanStack Router configuration"
+  ],
+  "nonGoals": [
+    "Redesigning the application architecture",
+    "Changing the authentication system",
+    "Modifying backend data structures",
+    "Refactoring unrelated components"
+  ],
+  "imageRequirements": {
+    "required": [],
+    "edits": []
+  }
+}
